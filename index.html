@@ -5,14 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salesforce Personalization Testing Sandbox</title>
     
-    <!-- 1. PASTE YOUR SALESFORCE INTERACTIONS SDK BEACON SCRIPT BELOW THIS LINE -->
     <script type="text/javascript">
         (function(g,e,v,e,r,g,a,g,e){g[r]=g[r]||function(){(g[r].q=g[r].q||[]).push(arguments)};
         a=e.createElement(v);g=e.getElementsByTagName(v)[0];a.async=1;a.src=g;
         g.parentNode.insertBefore(a,g)})(window,document,"script","https://cdn.c360a.salesforce.com/beacon/c360a/f2ebe5ea-d94e-4e07-949d-a64e24d3dea3/scripts/c360a.min.js","SalesforceInteractions");
     </script>
-    <!-- END OF BEACON SCRIPT -->
-
     <style>
         body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #333; }
         .product-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; margin-bottom: 20px; background-color: #f9f9f9; }
@@ -21,38 +18,45 @@
         .form-group { margin-bottom: 15px; }
         input[type="email"] { padding: 10px; width: 250px; border: 1px solid #ccc; border-radius: 4px; }
         .hero-banner { background: #e0f2fe; padding: 30px; border-radius: 8px; margin-bottom: 30px; text-align: center; }
+        .spacer { height: 800px; background: linear-gradient(#ffffff, #f0f0f0); margin: 20px 0; border: 1px dashed #ccc; text-align: center; padding-top: 20px; color: #999; }
     </style>
 </head>
 <body>
 
-    <!-- Test Case A: Web Campaign Content Zone -->
     <div id="hero-personalization-zone" class="hero-banner">
         <h2>Default Welcome Banner</h2>
-        <p>This is standard text. Later, you can test replacing this with a personalization campaign campaign action zone!</p>
+        <p>This is standard text. Later, you can test replacing this with a personalization campaign action zone!</p>
     </div>
 
-    <!-- Test Case B: Catalog & Product Detail Event Tracking -->
-    <!-- Notice the data attributes; your Sitemap can easily scrape these values -->
     <div class="product-card" data-item-type="Product" data-item-id="MOCK-BIKE-77" data-item-name="Apex Trail Runner" data-item-price="1200.00" data-item-category="Mountain Bikes">
         <span style="color: #666; font-size: 12px; font-weight: bold; text-transform: uppercase;">Category: Mountain Bikes</span>
         <h2>Apex Trail Runner Electric Bike</h2>
         <p>Item ID: <strong>MOCK-BIKE-77</strong></p>
         <p style="font-size: 18px; color: #0176d3; font-weight: bold;">$1,200.00</p>
         
-        <!-- Simulate standard behavioral triggers -->
-        <button class="btn" onclick="console.log('Simulated View Item Event fired')">Simulate View Product</button>
-        <button class="btn" style="background-color: #2e7d32;" onclick="alert('Added to cart! Use this action button to trigger an add-to-cart schema event.')">Add to Cart</button>
+        <button class="btn" id="btn-view-product">Simulate View Product</button>
+        <button class="btn" id="btn-add-to-cart" style="background-color: #2e7d32;">Add to Cart</button>
     </div>
 
-    <!-- Test Case C: Identity Mapping & Profile Schema Capture -->
-    <div class="product-card">
+    <div class="spacer">Scroll down to find the login block...</div>
+
+    <div class="product-card" id="login-section">
         <h3>User Identification Test</h3>
-        <p>Test your Identity Maps and profile capturing setups by filling this out to link this web session to a Data Cloud individual record.</p>
+        <p>Test your Identity Maps and profile capturing setups.</p>
         <div class="form-group">
             <input type="email" id="testEmailInput" placeholder="enter-test-email@domain.com">
-            <button class="btn" onclick="alert('Identity submitted. Map this input value to your profile attributes in your sitemap.')">Submit Login / Email</button>
+            <button class="btn" id="btn-submit-identity">Submit Login / Email</button>
         </div>
     </div>
 
+    <script type="text/javascript">
+        window.scrollStartTime = Date.now();
+        window.totalScrollTimeSeconds = 0;
+        
+        // Accumulate active page time when scrolling happens
+        window.addEventListener('scroll', function() {
+            window.totalScrollTimeSeconds = Math.round((Date.now() - window.scrollStartTime) / 1000);
+        }, { passive: true });
+    </script>
 </body>
 </html>
