@@ -9,7 +9,33 @@
         (function(g,e,v,e,r,g,a,g,e){g[r]=g[r]||function(){(g[r].q=g[r].q||[]).push(arguments)};
         a=e.createElement(v);g=e.getElementsByTagName(v)[0];a.async=1;a.src=g;
         g.parentNode.insertBefore(a,g)})(window,document,"script","https://cdn.c360a.salesforce.com/beacon/c360a/f2ebe5ea-d94e-4e07-949d-a64e24d3dea3/scripts/c360a.min.js","SalesforceInteractions");
-    </script>
+    </script><script type="text/javascript">
+    window.scrollStartTime = Date.now();
+    window.totalScrollTimeSeconds = 0;
+    
+    // 1. Accumulate active page time safely
+    window.addEventListener('scroll', function() {
+        window.totalScrollTimeSeconds = Math.round((Date.now() - window.scrollStartTime) / 1000);
+    }, { passive: true });
+
+    // 2. SAFETY CHECK: Wait for Salesforce Interactions SDK to be ready before binding events
+    document.addEventListener("ts_interactions_ready", function() {
+        console.log("Salesforce Interactions SDK successfully initialized!");
+        
+        // Bind click triggers manually here if you want to bypass the extension sitemap layer
+        const viewBtn = document.getElementById("btn-view-product");
+        if (viewBtn) {
+            viewBtn.addEventListener("click", function() {
+                if (window.SalesforceInteractions) {
+                    SalesforceInteractions.sendEvent({
+                        interaction: { name: "Clicked View Product Button" },
+                        user: { attributes: { deviceTrackingId: SalesforceInteractions.getAnonymousId() } }
+                    });
+                }
+            });
+        }
+    });
+</script>
     <style>
         body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #333; }
         .product-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; margin-bottom: 20px; background-color: #f9f9f9; }
