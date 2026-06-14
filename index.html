@@ -4,35 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salesforce Personalization Testing Sandbox</title>
-    <script type="text/javascript" src="https://cdn.c360a.salesforce.com/beacon/c360a/f2ebe5ea-d94e-4e07-949d-a64e24d3dea3/scripts/c360a.min.js"></script>  
-   <script type="text/javascript">
-    window.scrollStartTime = Date.now();
-    window.totalScrollTimeSeconds = 0;
-    
-    // 1. Accumulate active page time safely
-    window.addEventListener('scroll', function() {
-        window.totalScrollTimeSeconds = Math.round((Date.now() - window.scrollStartTime) / 1000);
-    }, { passive: true });
-
-    // 2. SAFETY CHECK: Wait for Salesforce Interactions SDK to be ready before binding events
-    document.addEventListener("ts_interactions_ready", function() {
-        console.log("Salesforce Interactions SDK successfully initialized!");
-        
-        // Bind click triggers manually here if you want to bypass the extension sitemap layer
-        const viewBtn = document.getElementById("btn-view-product");
-        if (viewBtn) {
-            viewBtn.addEventListener("click", function() {
-                if (window.SalesforceInteractions) {
-                    SalesforceInteractions.sendEvent({
-                        interaction: { name: "Clicked View Product Button" },
-                        user: { attributes: { deviceTrackingId: SalesforceInteractions.getAnonymousId() } }
-                    });
-                }
-            });
-        }
-    });
+     
+<!-- webruntime-branding-shared stylesheets ->
+<script type="text/javascript" src="https://cdn.c360a.salesforce.com/beacon/c360a/f2ebe5ea-d94e-4e07-949d-a64e24d3dea3/scripts/c360a.min.js"></script>
+<script>
+SalesforceInteractions.init({
+consents:
+[{
+provider: 'OneTrust',
+purpose: 'Tracking',
+status: SalesforceInteractions.ConsentStatus.OptIn
+}]
+}).then(() => {
+console.log('init successful');
+});
 </script>
-    <style>
+    
+      <style>
         body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #333; }
         .product-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; margin-bottom: 20px; background-color: #f9f9f9; }
         .btn { background-color: #0176d3; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 14px; }
